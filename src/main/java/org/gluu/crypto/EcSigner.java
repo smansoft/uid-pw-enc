@@ -246,4 +246,46 @@ public class EcSigner {
         signer.update(Base64.getDecoder().decode(inDataBase64.getBytes()));
         return signer.verify(Base64.getDecoder().decode(idSingBase64.getBytes()));        
     }
+
+    /**
+     * 
+     * @param ksFPath
+     */
+    public void setKsFPath(final String ksFPath) {
+        this.ksFPath = ksFPath;
+    }
+
+    /**
+     * 
+     * @return
+     */
+    public String getKsFPath() {
+        return this.ksFPath;
+    }
+
+    /**
+     * 
+     * @param ksPassword
+     */
+    public void setKsPassword(final String ksPassword) {
+        this.ksPassword = ksPassword;
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public String getKsPassword() {
+        return this.ksPassword;
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public KeyStore getKeyStore() {
+        return this.keyStore;
+    }
+    
 }
+

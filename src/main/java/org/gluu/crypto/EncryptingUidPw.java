@@ -67,6 +67,32 @@ public class EncryptingUidPw
 {
     private static final Logger LOG = LoggerFactory.getLogger(EncryptingUidPw.class);
     
+    static {
+        try {
+            Security.addProvider(new BouncyCastleProvider());    
+        }
+        catch (Exception e) {
+            LOG.error(PrintTools.stackTraceToString(e), e);
+        }
+    }
+    
+    // WebSite
+    private static final String DEF_WEP_SITE_KS_FPATH = "./web-site.pkcs12";
+
+    private static final String DEF_WEB_SITE_KS_ALIAS = "web-site-alias";
+    
+    private static final String DEF_WEB_SITE_DN_NAME = "CN=WebSite Certificate";
+    
+    // API
+    private static final String DEF_API_KS_FPATH = "./api.pkcs12";
+    
+    private static final String DEF_API_KS_ALIAS = "api-alias";
+    
+    private static final String DEF_API_DN_NAME = "CN=API Certificate";
+
+    // Common
+    private static final String DEF_KS_PASSWORD = "secret";    
+    
     /**
      * 
      * @param args
@@ -75,10 +101,12 @@ public class EncryptingUidPw
     {
         try {
             LOG.info("Application uid-pw-enc started...");
-            
+
+/*            
             Security.addProvider(new BouncyCastleProvider());        
             Provider provider = Security.getProvider(BouncyCastleProvider.PROVIDER_NAME);
-            
+*/
+/*
             LOG.trace("Application initialized - TRACE");
             LOG.trace("Application initialized - TRACE");
             LOG.debug("Application initialized - DEBUG");
@@ -105,6 +133,7 @@ public class EncryptingUidPw
                 LOG.info("Application initialized - INFO");        
                 
             }
+*/
             
             RandomStringGen randomStringAll = new RandomStringGen(16, RandomStringGen.DEF_MODE_ALL);
             
@@ -114,7 +143,6 @@ public class EncryptingUidPw
                 LOG.info("i = {}; rndString = {}", i, rndString);            
             }
             LOG.info("------------------------------------------- <<");
-            
             
             RandomStringGen randomStringAlpa = new RandomStringGen(16, RandomStringGen.DEF_MODE_ALPHA_LOWER);
             
@@ -135,6 +163,61 @@ public class EncryptingUidPw
             LOG.info("password = {}", password);
             
             {
+                WebSite webSite = new WebSite(new EcSigner(DEF_WEP_SITE_KS_FPATH, DEF_KS_PASSWORD),
+                        DEF_WEB_SITE_KS_ALIAS, DEF_WEB_SITE_DN_NAME);
+                webSite.genUidAndPassw();
+                webSite.genSignKeys();
+
+                String signIdWebSite = webSite.signId();
+                LOG.info("signIdWebSite = {}", signIdWebSite);
+
+                boolean verify = webSite.verifySignId(signIdWebSite);
+                LOG.info("verify = {}", verify);                
+                
+                API api = new API(new EcSigner(DEF_API_KS_FPATH, DEF_KS_PASSWORD),
+                        DEF_API_KS_ALIAS, DEF_API_DN_NAME);
+                api.genSignKeys();
+                
+/*                
+                private static final String DEF_WEP_SITE_FPATH = "./web-site.pkcs12";    
+                
+                private static final String DEF_API_FPATH = "./api.pkcs12";
+                
+                private static final String DEF_PASSWORD = "secret"; 
+*/
+
+/*                
+                1. ks file;
+                2. ks password;
+                3. alias;
+                4. dnName;
+                
+                1. gens uid/passw;                
+                
+                2. WebSite setup uid/passw
+*/  
+                
+/*                
+                3. WebSite.proc() {
+                    1. WebSite gens uid/passw;                
+                    2. Gen Keys;
+                    3. signs uid;
+                }
+*/
+/*                
+                4. WebSite sets uid/passw and signature of uid in API;
+                
+                API.proc()
+                
+                5. API signs signature
+                
+                6. API generates
+*/                   
+            }
+            
+            
+            {
+                
                 new File("./uid-pw-enc.pkcs12").delete();                
                 
                 EcSigner ecSigner = new EcSigner("./uid-pw-enc.pkcs12", "secret");
@@ -147,11 +230,10 @@ public class EncryptingUidPw
                 Date nextYear = calendar.getTime();
                 
                 ecSigner.addECKeyPair("web_site_keys", keyPairWS, "CN=WebSite", currDate, nextYear);
-                
+
                 ecSigner.saveKs();
-                
                 ecSigner.loadKs();
-                
+
                 boolean isWebSiteKeys = ecSigner.containsKeyAlias("web_site_keys");
                 
                 LOG.info("isWebSiteKeys = {}", isWebSiteKeys);
@@ -571,9 +653,6 @@ public class EncryptingUidPw
             // --------------------
             
         }
-        catch (InterruptedException e) {
-            LOG.error(PrintTools.stackTraceToString(e), e);            
-        }        
         catch (NoSuchAlgorithmException e) {
             LOG.error(PrintTools.stackTraceToString(e), e);            
         } catch (InvalidAlgorithmParameterException e) {
