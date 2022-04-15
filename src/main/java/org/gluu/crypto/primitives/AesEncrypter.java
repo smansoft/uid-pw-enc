@@ -124,16 +124,9 @@ public class AesEncrypter {
             this.aesKeyData.saltBase64 =
                     Base64.getEncoder().encodeToString(new RandomStringGen(AesEncrypter.DEF_AES_KEY_LENGTH, RandomStringGen.DEF_MODE_ALL).nextString().getBytes());
         }
-/*        
         PBEKeySpec keySpec = new PBEKeySpec(new String(Base64.getDecoder().decode(aesKeyData.keyBase64)).toCharArray(),
                 Base64.getDecoder().decode(aesKeyData.saltBase64),
                 DEF_ITER_COUNT, DEF_AES_KEY_LENGTH*8);
-*/
-        char [] keyPassw = Arrays.copyOfRange(new String(Base64.getDecoder().decode(aesKeyData.keyBase64)).toCharArray(), 0, 16);
-        byte [] salt = new byte[16];
-        Arrays.fill(salt, (byte)0);        
-        /// PBEKeySpec keySpec = new PBEKeySpec(keyPassw);
-        PBEKeySpec keySpec = new PBEKeySpec(keyPassw, salt, DEF_ITER_COUNT, DEF_AES_KEY_LENGTH*8);
         SecretKeyFactory keyFactory = SecretKeyFactory.getInstance(DEF_KEY_FACTORY, EncryptTools.getProvider());
         this.curSecretKey = keyFactory.generateSecret(keySpec);
     }
@@ -150,11 +143,7 @@ public class AesEncrypter {
      */
     public void encData(final AesEncData encData) throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException {
         if(encData.ivBase64 == null) {
-            // encData.ivBase64 = Base64.getEncoder().encodeToString(new RandomStringGen(AesEncrypter.DEF_AES_KEY_LENGTH, RandomStringGen.DEF_MODE_ALL).nextString().getBytes());
-            byte [] empty = new byte [16];
-            Arrays.fill(empty, (byte)0);
-            encData.ivBase64 = Base64.getEncoder().encodeToString(empty);
-            
+            encData.ivBase64 = Base64.getEncoder().encodeToString(new RandomStringGen(AesEncrypter.DEF_AES_KEY_LENGTH, RandomStringGen.DEF_MODE_ALL).nextString().getBytes());
         }
         Cipher cipher = Cipher.getInstance(DEF_AES_MODE, EncryptTools.getProvider());
         cipher.init(Cipher.ENCRYPT_MODE, this.curSecretKey, new IvParameterSpec(Base64.getDecoder().decode(encData.ivBase64)));
@@ -179,7 +168,6 @@ public class AesEncrypter {
         }
         Cipher cipher = Cipher.getInstance(DEF_AES_MODE, EncryptTools.getProvider());
         cipher.init(Cipher.DECRYPT_MODE, this.curSecretKey, new IvParameterSpec(Base64.getDecoder().decode(encData.ivBase64)));
-        /// cipher.init(Cipher.DECRYPT_MODE, this.curSecretKey);
         byte [] decData = cipher.doFinal(Base64.getDecoder().decode(encData.encDataBase64));
         encData.decDataBase64 = Base64.getEncoder().encodeToString(decData);
     }
