@@ -80,30 +80,6 @@ public class EncryptingUidPw
     {
         try {
             LOG.info("Application uid-pw-enc started...");
-
-            RandomStringGen randomStringAll = new RandomStringGen(16, RandomStringGen.DEF_MODE_ALL);
-
-            LOG.info("------------------------------------------- >>");        
-            for (int i = 0; i < 10; i++) {
-                String rndString = randomStringAll.nextString();
-                LOG.info("i = {}; rndString = {}", i, rndString);            
-            }
-            LOG.info("------------------------------------------- <<");
-            
-            RandomStringGen randomStringAlpa = new RandomStringGen(16, RandomStringGen.DEF_MODE_ALPHA_LOWER);
-            
-            LOG.info("------------------------------------------- >>");        
-            for (int i = 0; i < 10; i++) {
-                String rndString = randomStringAlpa.nextString();
-                LOG.info("i = {}; rndString = {}", i,    rndString);            
-            }
-            LOG.info("------------------------------------------- <<");
-            
-            String uid = new RandomStringGen(8, RandomStringGen.DEF_MODE_DIGITS).nextString();
-            String password = new RandomStringGen(21, RandomStringGen.DEF_MODE_ALL).nextString();
-
-            LOG.info("uid = {}", uid);
-            LOG.info("password = {}", password);
             
             {
                 ProcObject.ProcData procData = new ProcObject.ProcData();
@@ -188,6 +164,11 @@ public class EncryptingUidPw
 */                   
             }
             
+            String uid = new RandomStringGen(8, RandomStringGen.DEF_MODE_DIGITS).nextString();
+            String password = new RandomStringGen(21, RandomStringGen.DEF_MODE_ALL).nextString();
+
+            LOG.info("uid = {}", uid);
+            LOG.info("password = {}", password);
             
             {
 
