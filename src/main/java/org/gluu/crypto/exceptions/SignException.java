@@ -4,7 +4,7 @@
 package org.gluu.crypto.exceptions;
 
 /**
- * SignException
+ * SignException.
  * 
  * @author SMan
  * @version 2022-04-11

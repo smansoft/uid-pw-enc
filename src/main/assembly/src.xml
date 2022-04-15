@@ -32,7 +32,7 @@
             <outputDirectory>.</outputDirectory>
         </file>
         <file>
-            <source>${project.basedir}/README.md</source>
+            <source>${project.basedir}/README</source>
             <outputDirectory>.</outputDirectory>
         </file>
     </files>

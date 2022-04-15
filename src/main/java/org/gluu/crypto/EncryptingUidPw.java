@@ -99,7 +99,7 @@ public class EncryptingUidPw
             LOG.info("WebSite Ec Private Key (Base64) = {}", procData.webSiteEcPrivateKeyBase64);
             LOG.info("WebSite Ec Public Key (Base64) = {}", procData.webSiteEcPublicKeyBase64);            
             LOG.info("< WebSite Object: EC signature keys have been generated...");
-            LOG.info("------------------------");            
+            LOG.info("------------------------");
             LOG.info("> WebSite Object: Signing Uid:");            
             procData.webSiteSignatureBase64 = webSite.signData(procData.uidBase64);
             LOG.info("WebSite Object Signature (Base64) = {}", procData.webSiteSignatureBase64);
@@ -109,7 +109,7 @@ public class EncryptingUidPw
             boolean verify = webSite.verifyData(procData.uidBase64, procData.webSiteSignatureBase64);
             LOG.info("WebSite Object Verifying = {}", verify);
             LOG.info("< WebSite Object: Signature of Uid has been verified...");
-            LOG.info("------------------------");            
+            LOG.info("------------------------");
             LOG.info("> API Object: Generating EC signature keys:");            
             api.genSignKeys();
             api.initEcSignatureKeys(procData);
@@ -118,19 +118,17 @@ public class EncryptingUidPw
             procData.apiSignatureBase64 = api.signData(procData.webSiteSignatureBase64);
             LOG.info("API Object Signature (Base64) = {}", procData.apiSignatureBase64);            
             LOG.info("< API Object: EC signature keys have been generated...");
-            LOG.info("------------------------");            
+            LOG.info("------------------------");
             LOG.info("> API Object: Verifying signature of WebSite Object signature:");
             verify = api.verifyData(procData.webSiteSignatureBase64, procData.apiSignatureBase64);
             LOG.info("API Object Verifying = {}", verify);
             LOG.info("< API Object: Signature of WebSite Object signature has been verified...");
-            LOG.info("------------------------");
             LOG.info("------------------------");
             LOG.info("> API Object: Initializing AES key, salt:");
             api.initAes(procData);
             LOG.info("< API Object: AES key, salt have been initialized...");            
             LOG.info("------------------------");
             procData.srcDataBase64 = procData.passwordBase64;
-            LOG.info("------------------------");
             LOG.info("> API Object: Encrypting password:");            
             api.encrypt(procData);
             LOG.info("< API Object: Password has been encrypted...");            
@@ -138,21 +136,20 @@ public class EncryptingUidPw
             LOG.info("> API Object: Back decrypting password:");            
             api.decrypt(procData);
             LOG.info("< API Object: Password has been decrypted...");
-            LOG.info("------------------------");            
+            LOG.info("------------------------");
             LOG.info("AES Encrypting Data:");            
             LOG.info("src data (Base64) = {}", procData.srcDataBase64);                
             LOG.info("enc data (Base64) = {}", procData.encDataBase64);                
             LOG.info("dec data (Base64) = {}", procData.decDataBase64);
-            LOG.info("------------------------");            
+            LOG.info("------------------------");
             LOG.info("password (Decoded) = {}", new String(Base64.getDecoder().decode(procData.passwordBase64.getBytes())));
             LOG.info("src data (Decoded) = {}", new String(Base64.getDecoder().decode(procData.srcDataBase64.getBytes())));
             LOG.info("dec data (Decoded) = {}", new String(Base64.getDecoder().decode(procData.decDataBase64.getBytes())));
-            LOG.info("------------------------");            
+            LOG.info("------------------------");
             String xmlProcData = procData.toXML();
-            LOG.info("------------------------");            
             LOG.info("Flow Data in XML format:");            
             LOG.info("xmlProcData = {}", xmlProcData);
-            LOG.info("------------------------");            
+            LOG.info("------------------------");
             LOG.info("Application uid-pw-enc finished...");            
         }
         catch (NoSuchAlgorithmException e) {
