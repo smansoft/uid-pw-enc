@@ -225,7 +225,7 @@ public class EcSigner {
         signer.initSign(keyPair.getPrivate());
         signer.update(Base64.getDecoder().decode(inDataBase64.getBytes()));
         byte[] signature = signer.sign();
-        return new String(Base64.getEncoder().encode(signature));
+        return Base64.getEncoder().encodeToString(signature);
     }
 
     /**

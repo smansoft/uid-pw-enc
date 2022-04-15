@@ -13,7 +13,6 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SignatureException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
-import java.util.Base64;
 import java.util.Calendar;
 import java.util.Date;
 

@@ -18,6 +18,7 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.PBEKeySpec;
 
+import org.gluu.crypto.exceptions.EncException;
 import org.gluu.crypto.tools.EncryptTools;
 import org.gluu.crypto.tools.RandomStringGen;
 import org.slf4j.Logger;
@@ -103,8 +104,6 @@ public class AesEncrypter {
     
     private AesKeyData aesKeyData;
     
-    private PBEKeySpec keySpec;
-    
     private SecretKey curSecretKey;
 
     /**
@@ -115,7 +114,11 @@ public class AesEncrypter {
      */
     public AesEncrypter(final AesKeyData aesKeyData) throws NoSuchAlgorithmException, InvalidKeySpecException {
         this.aesKeyData = aesKeyData;
-        keySpec = new PBEKeySpec(new String(Base64.getDecoder().decode(aesKeyData.keyBase64)).toCharArray(),
+        if(this.aesKeyData.saltBase64 == null) {
+            this.aesKeyData.saltBase64 =
+                    Base64.getEncoder().encodeToString(new RandomStringGen(AesEncrypter.DEF_AES_KEY_LENGTH, RandomStringGen.DEF_MODE_ALL).nextString().getBytes());
+        }
+        PBEKeySpec keySpec = new PBEKeySpec(new String(Base64.getDecoder().decode(aesKeyData.keyBase64)).toCharArray(),
                 Base64.getDecoder().decode(aesKeyData.saltBase64),
                 DEF_ITER_COUNT, DEF_AES_KEY_LENGTH*8);
         SecretKeyFactory keyFactory = SecretKeyFactory.getInstance(DEF_KEY_FACTORY, EncryptTools.getProvider());
@@ -134,12 +137,12 @@ public class AesEncrypter {
      */
     public void encrData(final AesEncData encData) throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException {
         if(encData.ivBase64 == null) {
-            encData.ivBase64 = new RandomStringGen(AesEncrypter.DEF_AES_KEY_LENGTH, RandomStringGen.DEF_MODE_ALL).nextString();            
+            encData.ivBase64 = Base64.getEncoder().encodeToString(new RandomStringGen(AesEncrypter.DEF_AES_KEY_LENGTH, RandomStringGen.DEF_MODE_ALL).nextString().getBytes());            
         }
         Cipher cipher = Cipher.getInstance(DEF_AES_MODE, EncryptTools.getProvider());
         cipher.init(Cipher.ENCRYPT_MODE, this.curSecretKey, new IvParameterSpec(Base64.getDecoder().decode(encData.ivBase64)));
         byte [] encrData = cipher.doFinal(Base64.getDecoder().decode(encData.srcDataBase64));
-        encData.encDataBase64 = new String(Base64.getEncoder().encode(encrData));
+        encData.encDataBase64 = Base64.getEncoder().encodeToString(encrData);
     }
 
     /**
@@ -151,12 +154,16 @@ public class AesEncrypter {
      * @throws InvalidAlgorithmParameterException
      * @throws IllegalBlockSizeException
      * @throws BadPaddingException
+     * @throws EncException 
      */
-    public void decrData(final AesEncData encData) throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException {
+    public void decrData(final AesEncData encData) throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException, EncException {
+        if(encData.ivBase64 == null) {
+            throw new EncException("ivBase64 (in AesEncData) is not defined");
+        }
         Cipher cipher = Cipher.getInstance(DEF_AES_MODE, EncryptTools.getProvider());
-        cipher.init(Cipher.DECRYPT_MODE, curSecretKey, new IvParameterSpec(Base64.getDecoder().decode(encData.ivBase64)));
+        cipher.init(Cipher.DECRYPT_MODE, this.curSecretKey, new IvParameterSpec(Base64.getDecoder().decode(encData.ivBase64)));
         byte [] decrData = cipher.doFinal(Base64.getDecoder().decode(encData.encDataBase64));
-        encData.decrDataBase64 = new String(Base64.getEncoder().encode(decrData));
+        encData.decrDataBase64 = Base64.getEncoder().encodeToString(decrData);
     }
     
     /**
@@ -164,6 +171,6 @@ public class AesEncrypter {
      * @return
      */
     public AesKeyData getAesKeyData() {
-        return aesKeyData;
+        return this.aesKeyData;
     }
 }

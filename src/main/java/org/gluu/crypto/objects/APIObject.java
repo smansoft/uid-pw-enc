@@ -5,7 +5,6 @@ package org.gluu.crypto.objects;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 import java.util.Base64;
 
 import org.gluu.crypto.primitives.AesEncrypter;

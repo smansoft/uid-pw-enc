@@ -2,30 +2,22 @@ package org.gluu.crypto;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.StringReader;
-import java.io.StringWriter;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.KeyPair;
-import java.security.KeyPairGenerator;
 import java.security.KeyStoreException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
-import java.security.PrivateKey;
-import java.security.Provider;
-import java.security.PublicKey;
-import java.security.SecureRandom;
 import java.security.Security;
-import java.security.Signature;
 import java.security.SignatureException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
-import java.security.spec.ECGenParameterSpec;
 import java.security.spec.InvalidKeySpecException;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.operator.OperatorCreationException;
+import org.gluu.crypto.exceptions.EncException;
 import org.gluu.crypto.objects.APIObject;
 import org.gluu.crypto.objects.WebSiteObject;
 import org.gluu.crypto.primitives.AesEncrypter;
@@ -34,35 +26,15 @@ import org.gluu.crypto.tools.PrintTools;
 import org.gluu.crypto.tools.RandomStringGen;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 
 import java.util.Base64;
 import java.util.Date;
-import java.util.Base64.Decoder;
-import java.util.Base64.Encoder;
 import java.util.Calendar;
 
 import javax.crypto.BadPaddingException;
-import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
-import javax.crypto.SecretKey;
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.IvParameterSpec;
-import javax.crypto.spec.PBEKeySpec;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.TransformerFactoryConfigurationError;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 
 /**
  * 
@@ -108,41 +80,8 @@ public class EncryptingUidPw
         try {
             LOG.info("Application uid-pw-enc started...");
 
-/*            
-            Security.addProvider(new BouncyCastleProvider());        
-            Provider provider = Security.getProvider(BouncyCastleProvider.PROVIDER_NAME);
-*/
-/*
-            LOG.trace("Application initialized - TRACE");
-            LOG.trace("Application initialized - TRACE");
-            LOG.debug("Application initialized - DEBUG");
-            LOG.info("Application initialized - INFO");
-            LOG.warn("Application initialized - WARN");
-            LOG.error("Application initialized - ERROR");
-            
-            Object obj = new Object();
-            
-            synchronized(obj) {
-                
-                LOG.info("Application initialized - INFO");
-                
-                obj.wait(100);
-                
-                LOG.info("Application initialized - INFO");
-                
-                obj.wait(131);
-                
-                LOG.info("Application initialized - INFO");
-                
-                obj.wait(300);
-                
-                LOG.info("Application initialized - INFO");        
-                
-            }
-*/
-            
             RandomStringGen randomStringAll = new RandomStringGen(16, RandomStringGen.DEF_MODE_ALL);
-            
+
             LOG.info("------------------------------------------- >>");        
             for (int i = 0; i < 10; i++) {
                 String rndString = randomStringAll.nextString();
@@ -185,6 +124,8 @@ public class EncryptingUidPw
                 
                 verify = api.verifyData(signIdWebSite, signSignApi);
                 LOG.info("verify = {}", verify);
+                
+                LOG.info("------------------------");
                 
 /*                
                 private static final String DEF_WEP_SITE_FPATH = "./web-site.pkcs12";    
@@ -259,11 +200,13 @@ public class EncryptingUidPw
                 
                 LOG.info("verify = {}", verify);
 
+/*
                 SecureRandom random = new SecureRandom();
-                
+
                 byte[] iv = new byte[AesEncrypter.DEF_AES_KEY_LENGTH];
                 random.nextBytes(iv);
                 String ivStr = new String(Base64.getEncoder().encode(iv));
+*/
                 
                 byte [] digestSign = null;
                 String digestSignStr;
@@ -278,23 +221,25 @@ public class EncryptingUidPw
                 System.arraycopy(new String(Base64.getDecoder().decode(digestSignStr.getBytes())).toCharArray(), 0, secretKey, 0, secretKey.length);
                 String secretKeyStr = new String(Base64.getEncoder().encode(new String(secretKey).getBytes())); 
                 
-                String encSalt = new RandomStringGen(AesEncrypter.DEF_AES_KEY_LENGTH, RandomStringGen.DEF_MODE_ALL).nextString();
+                // String encSalt = new RandomStringGen(AesEncrypter.DEF_AES_KEY_LENGTH, RandomStringGen.DEF_MODE_ALL).nextString();
                 
                 LOG.info("secretKeyStr = {}", secretKeyStr);                
-                LOG.info("ivStr = {}", ivStr);                
-                LOG.info("encSalt = {}", encSalt);                
+//                LOG.info("ivStr = {}", ivStr);                
+//                LOG.info("encSalt = {}", encSalt);                
                 
-                AesEncrypter aesEncrypter = new AesEncrypter(new AesEncrypter.AesKeyData(secretKeyStr, ivStr, encSalt));
+                AesEncrypter aesEncrypter = new AesEncrypter(new AesEncrypter.AesKeyData(secretKeyStr, null));
                 
-                String passwEncrypted = aesEncrypter.encrData(new String(Base64.getEncoder().encode(password.getBytes())));
+                AesEncrypter.AesEncData aesEncData = new AesEncrypter.AesEncData(null, new String(Base64.getEncoder().encode(password.getBytes())), null, null);
                 
-                LOG.info("passwEncrypted = {}", passwEncrypted);
+                aesEncrypter.encrData(aesEncData);
                 
-                String passwDecrypted = aesEncrypter.decrData(passwEncrypted);
+                LOG.info("aesEncData.encDataBase64 = {}", aesEncData.encDataBase64);
                 
-                LOG.info("passwDecrypted = {}", passwDecrypted);
+                aesEncrypter.decrData(aesEncData);
                 
-                LOG.info("passwDecrypted = {}", new String(Base64.getDecoder().decode(passwDecrypted)));                
+                LOG.info("aesEncData.decrDataBase64 = {}", aesEncData.decrDataBase64);
+                
+                LOG.info("decrData = {}", new String(Base64.getDecoder().decode(aesEncData.decrDataBase64.getBytes())));                
                 
             }
 /*            
@@ -690,6 +635,8 @@ public class EncryptingUidPw
         } catch (IllegalBlockSizeException e) {
             LOG.error(PrintTools.stackTraceToString(e), e);            
         } catch (BadPaddingException e) {
+            LOG.error(PrintTools.stackTraceToString(e), e);            
+        } catch (EncException e) {
             LOG.error(PrintTools.stackTraceToString(e), e);            
         }
         

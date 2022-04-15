@@ -1,4 +1,4 @@
-package org.gluu.crypto;
+package org.gluu.crypto.tools;
 
 import org.junit.Test;
 import org.gluu.crypto.tools.RandomStringGen;
@@ -11,9 +11,9 @@ import org.slf4j.LoggerFactory;
  * @author SMan
  * @version 2022-04-10
  */
-public class RandomStringTest {
+public class RandomStringGenTest {
 
-    private static final Logger LOG = LoggerFactory.getLogger(RandomStringTest.class);
+    private static final Logger LOG = LoggerFactory.getLogger(RandomStringGenTest.class);
 
     private static final int DEF_LENGTH_1 = 16;
     
