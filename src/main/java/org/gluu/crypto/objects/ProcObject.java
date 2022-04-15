@@ -40,6 +40,8 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 /**
+ * Base (abstract) class of processing classes.   
+ * 
  * @author SMan
  * @version 2022-04-11
  */

@@ -25,7 +25,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * 
+ * AesEncrypter, AES primitive, that provides Encrypting/Decrypting of String, using "AES/GCM/NoPadding" mode.
+ * Length of Key: 128 bits.
+ *
  * @author SMan
  * @version 2022-04-11
  */
@@ -35,6 +37,7 @@ public class AesEncrypter {
     private static final Logger LOG = LoggerFactory.getLogger(AesEncrypter.class);
     
     /**
+     * AesKeyData, key data: key and salt (in Base64) for AES.
      * 
      * @author SMan
      * @version 2022-04-11
@@ -62,9 +65,11 @@ public class AesEncrypter {
     }
 
     /**
+     * Encrypting Data: source, encrypted, back decrypted.
+     * Also contains init IV vector (for AES).  
      * 
      * @author SMan
-     *
+     * @version 2022-04-11
      */
     public static class AesEncData {
         

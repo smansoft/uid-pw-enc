@@ -46,6 +46,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * EcSigner, Crypto Primitive, that provides signing of String data, using curve 'secp256r1'.
+ * Generates EC keys and saves them in keystorage in 'PKCS12' format.
  * 
  * @author SMan
  * @version 2022-04-11
@@ -287,6 +289,5 @@ public class EcSigner {
     public KeyStore getKeyStore() {
         return this.keyStore;
     }
-    
 }
 

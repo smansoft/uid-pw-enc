@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * WebSite Object
  * 
  * @author SMan
  * @version 2022-04-11
