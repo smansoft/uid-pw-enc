@@ -27,6 +27,7 @@ import org.gluu.crypto.tools.PrintTools;
 import org.gluu.crypto.tools.RandomStringGen;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.xml.sax.SAXException;
 
 import java.util.Base64;
 import java.util.Date;
@@ -35,6 +36,8 @@ import java.util.Calendar;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactoryConfigurationError;
 
 /**
@@ -123,9 +126,29 @@ public class EncryptingUidPw
                 
                 LOG.info("procData.password = {}", new String(Base64.getDecoder().decode(procData.passwordBase64.getBytes())));
                 LOG.info("procData.srcData = {}", new String(Base64.getDecoder().decode(procData.srcDataBase64.getBytes())));
-                LOG.info("procData.decData = {}", new String(Base64.getDecoder().decode(procData.decDataBase64.getBytes())));                
+                LOG.info("procData.decData = {}", new String(Base64.getDecoder().decode(procData.decDataBase64.getBytes())));
                 
                 LOG.info("------------------------");
+                
+                String xmlProcData = procData.toXML();
+                
+                LOG.info("xmlProcData = {}", xmlProcData);
+                
+                LOG.info("------------------------");
+                
+                ProcObject.ProcData procDataCpy = new ProcObject.ProcData();
+                procDataCpy.fromXML(xmlProcData);
+                
+                
+                LOG.info("------------------------");
+                
+                String xmlProcDataCpy = procDataCpy.toXML();
+                
+                LOG.info("xmlProcDataCpy = {}", xmlProcData);
+                
+                LOG.info("xmlProcData == xmlProcDataCpy: {}", xmlProcData.equals(xmlProcDataCpy));
+                
+                LOG.info("------------------------");                
                 
 /*                
                 private static final String DEF_WEP_SITE_FPATH = "./web-site.pkcs12";    
@@ -643,6 +666,12 @@ public class EncryptingUidPw
             LOG.error(PrintTools.stackTraceToString(e), e);            
         } catch (EncException e) {
             LOG.error(PrintTools.stackTraceToString(e), e);            
+        } catch (ParserConfigurationException e) {
+            LOG.error(PrintTools.stackTraceToString(e), e);
+        } catch (TransformerException e) {
+            LOG.error(PrintTools.stackTraceToString(e), e);            
+        } catch (SAXException e) {
+            LOG.error(PrintTools.stackTraceToString(e), e);
         }
         
 /*        
