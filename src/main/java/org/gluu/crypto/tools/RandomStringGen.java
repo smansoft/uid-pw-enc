@@ -9,6 +9,7 @@ import java.util.Locale;
 import org.bouncycastle.util.Arrays;
 
 /**
+ * RandomStringGen, random generator, tool class.
  * 
  * @author SMan
  * @version 2022-04-10
@@ -47,6 +48,7 @@ public class RandomStringGen {
     private final int buffLength; 
 
     /**
+     * Create an alphanumeric strings from given array of symbols.
      * 
      * @param length
      * @param symbols
@@ -75,6 +77,8 @@ public class RandomStringGen {
 
     /**
      * Generate a random string.
+     * 
+     * @return
      */
     public String nextString() {
         final char[] buf = new char[this.buffLength];
@@ -86,6 +90,7 @@ public class RandomStringGen {
     }
 
     /**
+     * Initializing the array of symbols. 
      * 
      * @param mode
      * @return

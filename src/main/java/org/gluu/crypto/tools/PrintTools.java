@@ -7,11 +7,13 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
 /**
+ * PrintTools, tools class.
+ *
  *
  * @author Sergey Manoylo
  * @version 2022-04-10
  */
-public class PrintTools {
+public abstract class PrintTools {
     
     /**
      * 

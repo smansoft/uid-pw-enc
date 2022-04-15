@@ -4,6 +4,7 @@
 package org.gluu.crypto.exceptions;
 
 /**
+ * EncException
  * 
  * @author SMan
  * @version 2022-04-11

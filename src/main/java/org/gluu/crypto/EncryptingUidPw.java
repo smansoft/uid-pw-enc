@@ -32,6 +32,7 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactoryConfigurationError;
 
 /**
+ * Main Class, that provides modeling of Crypto Processing, using objects: WebSite, API.         
  * 
  * @author SMan
  * @version 2022-04-11
@@ -67,16 +68,15 @@ public class EncryptingUidPw
     private static final String DEF_KS_PASSWORD = "secret";    
     
     /**
-     * 
+     * Entry Point.
+     *  
      * @param args
      */
     public static void main( String[] args )
     {
         try {
             LOG.info("Application uid-pw-enc started...");
-            
             ProcObject.ProcData procData = new ProcObject.ProcData();
-            
             LOG.info("------------------------");            
             LOG.info("> Creating WebSite Object:");            
             WebSiteObject webSite = new WebSiteObject(new EcSigner(DEF_WEP_SITE_KS_FPATH, DEF_KS_PASSWORD), DEF_WEB_SITE_KS_ALIAS, DEF_WEB_SITE_DN_NAME);
@@ -191,5 +191,4 @@ public class EncryptingUidPw
             LOG.error(PrintTools.stackTraceToString(e), e);            
         }
     }
-    
 }

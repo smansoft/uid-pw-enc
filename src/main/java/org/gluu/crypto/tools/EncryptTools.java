@@ -11,11 +11,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * 
+ * EncryptTools, tools class.
+ *  
  * @author SMan
  * @version 2022-04-11
  */
-public class EncryptTools {
+public abstract class EncryptTools {
     
     private static final Logger LOG = LoggerFactory.getLogger(EncryptTools.class);
     

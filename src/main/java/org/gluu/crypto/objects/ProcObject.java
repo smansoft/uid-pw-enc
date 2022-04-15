@@ -41,7 +41,7 @@ import org.xml.sax.SAXException;
 
 /**
  * @author SMan
- *
+ * @version 2022-04-11
  */
 public abstract class ProcObject {
 
