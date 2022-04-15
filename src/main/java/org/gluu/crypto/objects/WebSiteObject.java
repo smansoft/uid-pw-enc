@@ -1,14 +1,17 @@
 /**
  * 
  */
-package org.gluu.crypto;
+package org.gluu.crypto.objects;
+
+import org.gluu.crypto.primitives.EcSigner;
+import org.gluu.crypto.tools.RandomStringGen;
 
 /**
  * 
  * @author SMan
  * @version 2022-04-11
  */
-public class WebSite extends ProcObject {
+public class WebSiteObject extends ProcObject {
 
     /**
      * 
@@ -16,7 +19,7 @@ public class WebSite extends ProcObject {
      * @param ksAlias
      * @param dnName
      */
-    public WebSite(final EcSigner ecSigner, final String ksAlias, final String dnName) {
+    public WebSiteObject(final EcSigner ecSigner, final String ksAlias, final String dnName) {
         super(ecSigner);
         
         setKsAlias(ksAlias);

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.gluu.crypto;
+package org.gluu.crypto.primitives;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -41,6 +41,7 @@ import org.bouncycastle.cert.jcajce.JcaX509v3CertificateBuilder;
 import org.bouncycastle.operator.ContentSigner;
 import org.bouncycastle.operator.OperatorCreationException;
 import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
+import org.gluu.crypto.tools.EncryptTools;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

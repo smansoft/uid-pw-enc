@@ -26,6 +26,12 @@ import java.security.spec.InvalidKeySpecException;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.operator.OperatorCreationException;
+import org.gluu.crypto.objects.APIObject;
+import org.gluu.crypto.objects.WebSiteObject;
+import org.gluu.crypto.primitives.AesEncrypter;
+import org.gluu.crypto.primitives.EcSigner;
+import org.gluu.crypto.tools.PrintTools;
+import org.gluu.crypto.tools.RandomStringGen;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -153,9 +159,6 @@ public class EncryptingUidPw
             }
             LOG.info("------------------------------------------- <<");
             
-//            Encoder base64Encoder = Base64.getEncoder();
-//            Decoder base64Decoder = Base64.getDecoder();
-            
             String uid = new RandomStringGen(8, RandomStringGen.DEF_MODE_DIGITS).nextString();
             String password = new RandomStringGen(21, RandomStringGen.DEF_MODE_ALL).nextString();
 
@@ -163,20 +166,25 @@ public class EncryptingUidPw
             LOG.info("password = {}", password);
             
             {
-                WebSite webSite = new WebSite(new EcSigner(DEF_WEP_SITE_KS_FPATH, DEF_KS_PASSWORD),
-                        DEF_WEB_SITE_KS_ALIAS, DEF_WEB_SITE_DN_NAME);
+                WebSiteObject webSite = new WebSiteObject(new EcSigner(DEF_WEP_SITE_KS_FPATH, DEF_KS_PASSWORD), DEF_WEB_SITE_KS_ALIAS, DEF_WEB_SITE_DN_NAME);
                 webSite.genUidAndPassw();
                 webSite.genSignKeys();
-
+                
                 String signIdWebSite = webSite.signId();
                 LOG.info("signIdWebSite = {}", signIdWebSite);
 
                 boolean verify = webSite.verifySignId(signIdWebSite);
                 LOG.info("verify = {}", verify);                
                 
-                API api = new API(new EcSigner(DEF_API_KS_FPATH, DEF_KS_PASSWORD),
+                APIObject api = new APIObject(new EcSigner(DEF_API_KS_FPATH, DEF_KS_PASSWORD),
                         DEF_API_KS_ALIAS, DEF_API_DN_NAME);
                 api.genSignKeys();
+                
+                String signSignApi = api.signData(signIdWebSite);
+                LOG.info("signSignApi = {}", signSignApi);
+                
+                verify = api.verifyData(signIdWebSite, signSignApi);
+                LOG.info("verify = {}", verify);
                 
 /*                
                 private static final String DEF_WEP_SITE_FPATH = "./web-site.pkcs12";    
@@ -217,14 +225,14 @@ public class EncryptingUidPw
             
             
             {
-                
-                new File("./uid-pw-enc.pkcs12").delete();                
-                
+
+                new File("./uid-pw-enc.pkcs12").delete();
+
                 EcSigner ecSigner = new EcSigner("./uid-pw-enc.pkcs12", "secret");
                 KeyPair keyPairWS = ecSigner.genECKeiPair();
-                
+
                 Calendar calendar = Calendar.getInstance();
-                
+
                 Date currDate = calendar.getTime();
                 calendar.add(Calendar.YEAR, 1);
                 Date nextYear = calendar.getTime();
@@ -276,7 +284,7 @@ public class EncryptingUidPw
                 LOG.info("ivStr = {}", ivStr);                
                 LOG.info("encSalt = {}", encSalt);                
                 
-                AesEncrypter aesEncrypter = new AesEncrypter( new AesEncrypter.AesKeyData(secretKeyStr, ivStr, encSalt));
+                AesEncrypter aesEncrypter = new AesEncrypter(new AesEncrypter.AesKeyData(secretKeyStr, ivStr, encSalt));
                 
                 String passwEncrypted = aesEncrypter.encrData(new String(Base64.getEncoder().encode(password.getBytes())));
                 

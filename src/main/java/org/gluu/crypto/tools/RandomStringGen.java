@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.gluu.crypto;
+package org.gluu.crypto.tools;
 
 import java.security.SecureRandom;
 import java.util.Locale;

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.gluu.crypto;
+package org.gluu.crypto.objects;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,6 +18,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import org.bouncycastle.operator.OperatorCreationException;
+import org.gluu.crypto.primitives.EcSigner;
 
 /**
  * @author SMan
@@ -134,7 +135,7 @@ public abstract class ProcObject {
      * @throws IOException
      */
     public void genSignKeys() throws NoSuchAlgorithmException, InvalidAlgorithmParameterException, CertificateException, KeyStoreException, OperatorCreationException, IOException {
-        File ksFile = new File(ecSigner.getKsFPath());
+        File ksFile = new File(this.ecSigner.getKsFPath());
         if(ksFile.exists()) {
             ksFile.delete();
         }
@@ -147,8 +148,8 @@ public abstract class ProcObject {
         
         this.ecSigner.addECKeyPair(this.ksAlias, keyPair, this.dnName, currDate, nextYear);
         this.ecSigner.saveKs();
-        this.ecSigner.loadKs(); 
-        
+        this.ecSigner.loadKs();
+
         if(!this.ecSigner.containsKeyAlias(this.ksAlias)) {
             throw new KeyStoreException(String.format("Alias %s not found", this.ksAlias));
         }
@@ -164,7 +165,7 @@ public abstract class ProcObject {
      * @throws SignatureException
      */
     public String signId() throws UnrecoverableKeyException, InvalidKeyException, KeyStoreException, NoSuchAlgorithmException, SignatureException {
-        return ecSigner.sign(this.ksAlias, new String(Base64.getEncoder().encode(uid.getBytes())));  
+        return signData(this.uid);
     }
 
     /**
@@ -178,9 +179,35 @@ public abstract class ProcObject {
      * @throws SignatureException
      */
     public boolean verifySignId(final String idSingBase64) throws UnrecoverableKeyException, InvalidKeyException, KeyStoreException, NoSuchAlgorithmException, SignatureException {
-        return ecSigner.verify(this.ksAlias,
-                new String(Base64.getEncoder().encode(uid.getBytes())),
-                idSingBase64);
+        return verifyData(this.uid, idSingBase64);
     }
     
+    /**
+     * 
+     * @param inDataBase64
+     * @return
+     * @throws UnrecoverableKeyException
+     * @throws InvalidKeyException
+     * @throws KeyStoreException
+     * @throws NoSuchAlgorithmException
+     * @throws SignatureException
+     */
+    public String signData(final String inDataBase64) throws UnrecoverableKeyException, InvalidKeyException, KeyStoreException, NoSuchAlgorithmException, SignatureException {
+        return this.ecSigner.sign(this.ksAlias, inDataBase64);        
+    }
+
+    /**
+     * 
+     * @param inDataBase64
+     * @param idSingBase64
+     * @return
+     * @throws UnrecoverableKeyException
+     * @throws InvalidKeyException
+     * @throws KeyStoreException
+     * @throws NoSuchAlgorithmException
+     * @throws SignatureException
+     */
+    public boolean verifyData(final String inDataBase64, final String idSingBase64) throws UnrecoverableKeyException, InvalidKeyException, KeyStoreException, NoSuchAlgorithmException, SignatureException {
+        return this.ecSigner.verify(this.ksAlias, inDataBase64, idSingBase64);        
+    }
 }
