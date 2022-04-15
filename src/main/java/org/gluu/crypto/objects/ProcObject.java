@@ -5,6 +5,7 @@ package org.gluu.crypto.objects;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.StringWriter;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.KeyPair;
@@ -13,17 +14,35 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SignatureException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
+import java.util.Base64;
 import java.util.Calendar;
 import java.util.Date;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
 import org.bouncycastle.operator.OperatorCreationException;
 import org.gluu.crypto.primitives.EcSigner;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 /**
  * @author SMan
  *
  */
 public abstract class ProcObject {
+    
+    @SuppressWarnings("unused")
+    private static final Logger LOG = LoggerFactory.getLogger(ProcObject.class);
     
     private static int DEF_CERTIFICATE_PERIOD = 1; // years 
 
@@ -58,6 +77,98 @@ public abstract class ProcObject {
          */
         public ProcData() {
         }
+        
+        /**
+         * 
+         * @param xmlProcData
+         */
+        public void fromXML(final String xmlProcData) {
+            
+        }
+        
+        /**
+         * 
+         * @return
+         * @throws ParserConfigurationException 
+         * @throws TransformerException 
+         */
+        public String toXML() throws ParserConfigurationException, TransformerException {
+            
+            DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+            Document document = documentBuilder.newDocument();
+
+            Element proc_data_element = document.createElement("proc_data");
+            
+            document.appendChild(proc_data_element);            
+            
+            Element uid_element =  document.createElement("uid");
+            Element password_element =  document.createElement("password");
+            
+            Element web_site_ec_private_key_element = document.createElement("web_site_ec_private_key");
+            Element web_site_ec_public_key_element = document.createElement("web_site_ec_public_key");            
+            Element web_site_signature_element = document.createElement("web_site_signature");            
+
+            Element api_ec_private_key_element = document.createElement("api_ec_private_key");
+            Element api_ec_public_key_element = document.createElement("api_ec_public_key");            
+            Element api_signature_element = document.createElement("api_signature");            
+
+            Element enc_salt_element = document.createElement("enc_salt");
+            Element secret_key_element = document.createElement("secret_key");            
+            
+            Element iv_element = document.createElement("iv");            
+            Element src_data_element = document.createElement("src_data");            
+            Element enc_data_element = document.createElement("enc_data");            
+            Element dec_data_element = document.createElement("dec_data");
+            
+            proc_data_element.appendChild(uid_element);
+            proc_data_element.appendChild(password_element);
+            
+            proc_data_element.appendChild(web_site_ec_private_key_element);
+            proc_data_element.appendChild(web_site_ec_public_key_element);
+            proc_data_element.appendChild(web_site_signature_element);            
+            
+            proc_data_element.appendChild(api_ec_private_key_element);
+            proc_data_element.appendChild(api_ec_public_key_element);
+            proc_data_element.appendChild(api_signature_element);            
+            
+            proc_data_element.appendChild(enc_salt_element);            
+            proc_data_element.appendChild(secret_key_element);
+
+            proc_data_element.appendChild(iv_element);
+            proc_data_element.appendChild(src_data_element);
+            proc_data_element.appendChild(enc_data_element);
+            proc_data_element.appendChild(dec_data_element);            
+            
+            uid_element.setTextContent(uidBase64);
+            password_element.setTextContent(passwordBase64);
+            
+            web_site_ec_private_key_element.setTextContent(webSiteEcPrivateKeyBase64);
+            web_site_ec_public_key_element.setTextContent(webSiteEcPublicKeyBase64);            
+            web_site_signature_element.setTextContent(webSiteSignatureBase64);
+            
+            api_ec_private_key_element.setTextContent(apiEcPrivateKeyBase64);
+            api_ec_public_key_element.setTextContent(apiEcPublicKeyBase64);            
+            api_signature_element.setTextContent(apiSignatureBase64);  
+            
+            enc_salt_element.setTextContent(encSaltBase64);
+            secret_key_element.setTextContent(secretKeyBase64);            
+            
+            iv_element.setTextContent(ivBase64);
+            src_data_element.setTextContent(srcDataBase64);
+            enc_data_element.setTextContent(encDataBase64);
+            dec_data_element.setTextContent(decDataBase64);            
+            
+            // Transformer tr = TransformerFactory.newInstance().newTransformer();
+            DOMSource source = new DOMSource(document);
+            
+            StringWriter writer = new StringWriter();
+            StreamResult result = new StreamResult(writer);
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            transformer.transform(source, result);
+            
+            return writer.toString();
+        }
     }       
     
     private EcSigner ecSigner;
@@ -72,46 +183,6 @@ public abstract class ProcObject {
     protected ProcObject(final EcSigner ecSigner) {
         this.ecSigner = ecSigner;
     }
-    
-    /**
-     * 
-     * @param uid
-     */
-/*    
-    public void setUid(final String uid) {
-        this.uid = uid; 
-    }
-*/    
-
-    /**
-     * 
-     * @return
-     */
-/*    
-    public String getUid() {
-        return this.uid; 
-    }
-*/    
-    
-    /**
-     * 
-     * @param password
-     */
-/*    
-    public void setPassword(String password) {
-        this.password = password;
-    }
-*/    
-
-    /**
-     * 
-     * @return
-     */
-/*    
-    public String getPassword() {
-        return this.password;
-    }
-*/    
     
     /**
      * 
@@ -191,37 +262,6 @@ public abstract class ProcObject {
             throw new KeyStoreException(String.format("Alias %s not found", this.ksAlias));
         }
     }
-
-    /**
-     * 
-     * @return
-     * @throws UnrecoverableKeyException
-     * @throws InvalidKeyException
-     * @throws KeyStoreException
-     * @throws NoSuchAlgorithmException
-     * @throws SignatureException
-     */
-/*    
-    public String signData() throws UnrecoverableKeyException, InvalidKeyException, KeyStoreException, NoSuchAlgorithmException, SignatureException {
-        return signData(this.uid);
-    }
-*/    
-
-    /**
-     * 
-     * @param idSingBase64
-     * @return
-     * @throws UnrecoverableKeyException
-     * @throws InvalidKeyException
-     * @throws KeyStoreException
-     * @throws NoSuchAlgorithmException
-     * @throws SignatureException
-     */
-/*    
-    public boolean verifySignId(final String idSingBase64) throws UnrecoverableKeyException, InvalidKeyException, KeyStoreException, NoSuchAlgorithmException, SignatureException {
-        return verifyData(this.uid, idSingBase64);
-    }
-*/    
     
     /**
      * 
