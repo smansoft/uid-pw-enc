@@ -1,7 +1,6 @@
 package org.gluu.crypto.tools;
 
 import org.junit.Test;
-import org.gluu.crypto.tools.RandomStringGen;
 import org.junit.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

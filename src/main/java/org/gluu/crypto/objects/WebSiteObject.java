@@ -3,6 +3,8 @@
  */
 package org.gluu.crypto.objects;
 
+import java.util.Base64;
+
 import org.gluu.crypto.primitives.EcSigner;
 import org.gluu.crypto.tools.RandomStringGen;
 
@@ -28,15 +30,11 @@ public class WebSiteObject extends ProcObject {
 
     /**
      * 
+     * @param procData
      */
-    public void genUidAndPassw() {
-        
-        String uid = new RandomStringGen(8, RandomStringGen.DEF_MODE_DIGITS).nextString();
-        String password = new RandomStringGen(21, RandomStringGen.DEF_MODE_ALL).nextString();
-        
-        setUid(uid);
-        setPassword(password);
-        
+    public void genUidAndPassw(ProcData procData) {
+        procData.uidBase64 = Base64.getEncoder().encodeToString(new RandomStringGen(8, RandomStringGen.DEF_MODE_DIGITS).nextString().getBytes());
+        procData.passwordBase64 =  Base64.getEncoder().encodeToString(new RandomStringGen(21, RandomStringGen.DEF_MODE_ALL).nextString().getBytes());
     }
-
+    
 }

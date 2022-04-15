@@ -26,9 +26,39 @@ import org.gluu.crypto.primitives.EcSigner;
 public abstract class ProcObject {
     
     private static int DEF_CERTIFICATE_PERIOD = 1; // years 
-    
-    private String uid;
-    private String password;
+
+    /**
+     * 
+     * @author SMan
+     * @version 2022-04-11
+     */
+    public static class ProcData {
+        
+        public String uidBase64;
+        public String passwordBase64;
+        
+        public String webSiteEcPrivateKeyBase64;
+        public String webSiteEcPublicKeyBase64;        
+        public String webSiteSignatureBase64;
+
+        public String apiEcPrivateKeyBase64;
+        public String apiEcPublicKeyBase64;        
+        public String apiSignatureBase64;
+        
+        public String encSaltBase64; 
+        public String secretKeyBase64;
+        
+        public String ivBase64;        
+        public String srcDataBase64;
+        public String encDataBase64;
+        public String decDataBase64;
+        
+        /**
+         * 
+         */
+        public ProcData() {
+        }
+    }       
     
     private EcSigner ecSigner;
     
@@ -47,33 +77,41 @@ public abstract class ProcObject {
      * 
      * @param uid
      */
+/*    
     public void setUid(final String uid) {
         this.uid = uid; 
     }
+*/    
 
     /**
      * 
      * @return
      */
+/*    
     public String getUid() {
         return this.uid; 
     }
+*/    
     
     /**
      * 
      * @param password
      */
+/*    
     public void setPassword(String password) {
         this.password = password;
     }
+*/    
 
     /**
      * 
      * @return
      */
+/*    
     public String getPassword() {
         return this.password;
     }
+*/    
     
     /**
      * 
@@ -163,9 +201,11 @@ public abstract class ProcObject {
      * @throws NoSuchAlgorithmException
      * @throws SignatureException
      */
-    public String signId() throws UnrecoverableKeyException, InvalidKeyException, KeyStoreException, NoSuchAlgorithmException, SignatureException {
+/*    
+    public String signData() throws UnrecoverableKeyException, InvalidKeyException, KeyStoreException, NoSuchAlgorithmException, SignatureException {
         return signData(this.uid);
     }
+*/    
 
     /**
      * 
@@ -177,9 +217,11 @@ public abstract class ProcObject {
      * @throws NoSuchAlgorithmException
      * @throws SignatureException
      */
+/*    
     public boolean verifySignId(final String idSingBase64) throws UnrecoverableKeyException, InvalidKeyException, KeyStoreException, NoSuchAlgorithmException, SignatureException {
         return verifyData(this.uid, idSingBase64);
     }
+*/    
     
     /**
      * 

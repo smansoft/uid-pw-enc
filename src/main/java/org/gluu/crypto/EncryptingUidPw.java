@@ -19,6 +19,7 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.operator.OperatorCreationException;
 import org.gluu.crypto.exceptions.EncException;
 import org.gluu.crypto.objects.APIObject;
+import org.gluu.crypto.objects.ProcObject;
 import org.gluu.crypto.objects.WebSiteObject;
 import org.gluu.crypto.primitives.AesEncrypter;
 import org.gluu.crypto.primitives.EcSigner;
@@ -105,25 +106,48 @@ public class EncryptingUidPw
             LOG.info("password = {}", password);
             
             {
+                ProcObject.ProcData procData = new ProcObject.ProcData();
+                
                 WebSiteObject webSite = new WebSiteObject(new EcSigner(DEF_WEP_SITE_KS_FPATH, DEF_KS_PASSWORD), DEF_WEB_SITE_KS_ALIAS, DEF_WEB_SITE_DN_NAME);
-                webSite.genUidAndPassw();
+                webSite.genUidAndPassw(procData);
                 webSite.genSignKeys();
-                
-                String signIdWebSite = webSite.signId();
-                LOG.info("signIdWebSite = {}", signIdWebSite);
 
-                boolean verify = webSite.verifySignId(signIdWebSite);
-                LOG.info("verify = {}", verify);                
+                procData.webSiteEcPrivateKeyBase64 = Base64.getEncoder().encodeToString(webSite.getEcSigner().getECKeyPair(DEF_WEB_SITE_KS_ALIAS).getPrivate().getEncoded());                
+                procData.webSiteEcPublicKeyBase64 = Base64.getEncoder().encodeToString(webSite.getEcSigner().getECKeyPair(DEF_WEB_SITE_KS_ALIAS).getPublic().getEncoded());
                 
-                APIObject api = new APIObject(new EcSigner(DEF_API_KS_FPATH, DEF_KS_PASSWORD),
-                        DEF_API_KS_ALIAS, DEF_API_DN_NAME);
+                procData.webSiteSignatureBase64 = webSite.signData(procData.uidBase64);
+                LOG.info("procData.webSiteSignatureBase64 = {}", procData.webSiteSignatureBase64);
+
+                boolean verify = webSite.verifyData(procData.uidBase64, procData.webSiteSignatureBase64);
+                LOG.info("verify (WebSite) = {}", verify);                
+                
+                APIObject api = new APIObject(new EcSigner(DEF_API_KS_FPATH, DEF_KS_PASSWORD), DEF_API_KS_ALIAS, DEF_API_DN_NAME);
                 api.genSignKeys();
                 
-                String signSignApi = api.signData(signIdWebSite);
-                LOG.info("signSignApi = {}", signSignApi);
+                procData.apiEcPrivateKeyBase64 = Base64.getEncoder().encodeToString(api.getEcSigner().getECKeyPair(DEF_API_KS_ALIAS).getPrivate().getEncoded());                
+                procData.apiEcPublicKeyBase64 = Base64.getEncoder().encodeToString(api.getEcSigner().getECKeyPair(DEF_API_KS_ALIAS).getPublic().getEncoded());
                 
-                verify = api.verifyData(signIdWebSite, signSignApi);
-                LOG.info("verify = {}", verify);
+                procData.apiSignatureBase64 = api.signData(procData.webSiteSignatureBase64);
+                LOG.info("signSignApi = {}", procData.apiSignatureBase64);
+                
+                verify = api.verifyData(procData.webSiteSignatureBase64, procData.apiSignatureBase64);
+                LOG.info("verify (API) = {}", verify);
+                
+                api.initAes(procData);
+                
+                procData.srcDataBase64 = procData.passwordBase64; 
+
+                LOG.info("procData.srcDataBase64 = {}", procData.srcDataBase64);                
+                
+                api.encrypt(procData);
+                LOG.info("procData.encDataBase64 = {}", procData.encDataBase64);                
+                
+                api.decrypt(procData);
+                LOG.info("procData.decDataBase64 = {}", procData.decDataBase64);                
+                
+                LOG.info("procData.password = {}", new String(Base64.getDecoder().decode(procData.passwordBase64.getBytes())));
+                LOG.info("procData.srcData = {}", new String(Base64.getDecoder().decode(procData.srcDataBase64.getBytes())));
+                LOG.info("procData.decData = {}", new String(Base64.getDecoder().decode(procData.decDataBase64.getBytes())));                
                 
                 LOG.info("------------------------");
                 
@@ -231,15 +255,15 @@ public class EncryptingUidPw
                 
                 AesEncrypter.AesEncData aesEncData = new AesEncrypter.AesEncData(null, new String(Base64.getEncoder().encode(password.getBytes())), null, null);
                 
-                aesEncrypter.encrData(aesEncData);
+                aesEncrypter.encData(aesEncData);
                 
                 LOG.info("aesEncData.encDataBase64 = {}", aesEncData.encDataBase64);
                 
-                aesEncrypter.decrData(aesEncData);
+                aesEncrypter.decData(aesEncData);
                 
-                LOG.info("aesEncData.decrDataBase64 = {}", aesEncData.decrDataBase64);
+                LOG.info("aesEncData.decrDataBase64 = {}", aesEncData.decDataBase64);
                 
-                LOG.info("decrData = {}", new String(Base64.getDecoder().decode(aesEncData.decrDataBase64.getBytes())));                
+                LOG.info("decrData = {}", new String(Base64.getDecoder().decode(aesEncData.decDataBase64.getBytes())));                
                 
             }
 /*            

@@ -3,14 +3,18 @@
  */
 package org.gluu.crypto.objects;
 
-import java.security.MessageDigest;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.util.Base64;
+import java.security.spec.InvalidKeySpecException;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+
+import org.gluu.crypto.exceptions.EncException;
 import org.gluu.crypto.primitives.AesEncrypter;
 import org.gluu.crypto.primitives.EcSigner;
-import org.gluu.crypto.tools.EncryptTools;
-import org.gluu.crypto.tools.RandomStringGen;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,63 +24,11 @@ import org.slf4j.LoggerFactory;
  * @version 2022-04-11
  */
 public class APIObject extends ProcObject {
-
-    /**
-     * 
-     * @author SMan
-     *
-     */
-    public static class EncData {
-        
-        public String encSalt; 
-        
-        public String secretKey;
-        
-        public String iv;        
-        
-        public String srcData;
-        
-        public String encData;
-        
-        public String decrData;
-        
-        /**
-         * 
-         */
-        public EncData() {
-        }
-        
-        /**
-         * 
-         * @param encSalt
-         * @param secretKey
-         * @param iv
-         * @param srcData
-         * @param encData
-         * @param decrData
-         */
-        public EncData (final String encSalt,
-                final String secretKey,
-                final String iv,
-                final String srcData,
-                final String encData,
-                final String decrData) {
-            this.encSalt = encSalt; 
-            this.secretKey = secretKey;
-            this.iv = iv;
-            this.srcData = srcData;
-            this.encData = encData;
-            this.decrData = decrData;
-        }
-    }   
     
-    private static final Logger LOG = LoggerFactory.getLogger(APIObject.class);    
+    @SuppressWarnings("unused")
+    private static final Logger LOG = LoggerFactory.getLogger(APIObject.class);
     
-    private static final String DEF_HASH_ALG = "SHA-256";
-    
-    private String encSalt;
-    
-    private String secretKeyStr;    
+    private AesEncrypter aesEncrypter;    
 
     /**
      * 
@@ -93,32 +45,64 @@ public class APIObject extends ProcObject {
 
     /**
      * 
-     * @param signatureBase64
+     * @param procData
      * @throws NoSuchAlgorithmException
+     * @throws InvalidKeySpecException
      */
-    public void genKeys(final String signatureBase64) throws NoSuchAlgorithmException {
-        
-        this.encSalt = new RandomStringGen(AesEncrypter.DEF_AES_KEY_LENGTH, RandomStringGen.DEF_MODE_ALL).nextString();
-       
-        MessageDigest messageDigest = MessageDigest.getInstance(DEF_HASH_ALG, EncryptTools.getProvider());
-        messageDigest.update(Base64.getDecoder().decode(signatureBase64.getBytes()));
-        byte[] digestSign = messageDigest.digest();
-        
-        String digestSignStr = new String(Base64.getEncoder().encode(digestSign));
-        
-        char[] secretKey = new char[AesEncrypter.DEF_AES_KEY_LENGTH];
-        System.arraycopy(new String(Base64.getDecoder().decode(digestSignStr.getBytes())).toCharArray(), 0, secretKey, 0, secretKey.length);
-        this.secretKeyStr = new String(Base64.getEncoder().encode(new String(secretKey).getBytes()));
-
-        LOG.info("secretKeyStr = {}", secretKeyStr);                
-        LOG.info("encSalt = {}", encSalt);            
-        
-/*        
-        byte[] iv = new byte[AesEncrypter.DEF_AES_KEY_LENGTH];
-        random.nextBytes(iv);
-        String ivStr = new String(Base64.getEncoder().encode(iv));
-*/        
-
+    public void initAes(final ProcData procData) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        this.aesEncrypter = new AesEncrypter(new AesEncrypter.AesKeyData(procData.webSiteSignatureBase64, null));
+        procData.secretKeyBase64 = this.aesEncrypter.getAesKeyData().keyBase64;
+        procData.encSaltBase64 = this.aesEncrypter.getAesKeyData().saltBase64;
     }
-    
+
+    /**
+     * 
+     * @param procData
+     * @throws InvalidKeyException
+     * @throws NoSuchAlgorithmException
+     * @throws NoSuchPaddingException
+     * @throws InvalidAlgorithmParameterException
+     * @throws IllegalBlockSizeException
+     * @throws BadPaddingException
+     */
+    public void encrypt(final ProcData procData) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException {
+        
+        AesEncrypter.AesEncData aesEncData = new AesEncrypter.AesEncData();
+        
+        aesEncData.ivBase64 = procData.ivBase64;
+        aesEncData.srcDataBase64 = procData.srcDataBase64;
+        
+        this.aesEncrypter.encData(aesEncData);
+        
+        procData.ivBase64 = aesEncData.ivBase64;
+        procData.srcDataBase64 = aesEncData.srcDataBase64;
+        procData.encDataBase64 = aesEncData.encDataBase64;
+    }
+
+    /**
+     * 
+     * @param procData
+     * @throws InvalidKeyException
+     * @throws NoSuchAlgorithmException
+     * @throws NoSuchPaddingException
+     * @throws InvalidAlgorithmParameterException
+     * @throws IllegalBlockSizeException
+     * @throws BadPaddingException
+     * @throws EncException
+     */
+    public void decrypt(final ProcData procData) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException, EncException {
+        
+        AesEncrypter.AesEncData aesEncData = new AesEncrypter.AesEncData();        
+        
+        aesEncData.ivBase64 = procData.ivBase64;
+        aesEncData.srcDataBase64 = procData.srcDataBase64;
+        aesEncData.encDataBase64 = procData.encDataBase64;
+        
+        this.aesEncrypter.decData(aesEncData);
+        
+        procData.ivBase64 = aesEncData.ivBase64;
+        procData.srcDataBase64 = aesEncData.srcDataBase64;
+        procData.encDataBase64 = aesEncData.encDataBase64;
+        procData.decDataBase64 = aesEncData.decDataBase64;
+    }
 }
