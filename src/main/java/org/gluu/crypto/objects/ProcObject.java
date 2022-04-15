@@ -21,6 +21,7 @@ import java.util.Date;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
@@ -223,13 +224,14 @@ public abstract class ProcObject {
             enc_data_element.setTextContent(encDataBase64);
             dec_data_element.setTextContent(decDataBase64);
 
-            // Transformer tr = TransformerFactory.newInstance().newTransformer();
             DOMSource source = new DOMSource(document);
 
             StringWriter writer = new StringWriter();
             StreamResult result = new StreamResult(writer);
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
+            transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+            transformer.setOutputProperty(OutputKeys.STANDALONE, "yes");
             transformer.transform(source, result);
 
             return writer.toString();

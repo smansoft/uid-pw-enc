@@ -5,8 +5,11 @@ package org.gluu.crypto.objects;
 
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
+import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
 import java.security.spec.InvalidKeySpecException;
+import java.util.Base64;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -105,4 +108,17 @@ public class APIObject extends ProcObject {
         procData.encDataBase64 = aesEncData.encDataBase64;
         procData.decDataBase64 = aesEncData.decDataBase64;
     }
+    
+    /**
+     * 
+     * @param procData
+     * @throws NoSuchAlgorithmException 
+     * @throws KeyStoreException 
+     * @throws UnrecoverableKeyException 
+     */
+    public void initEcSignatureKeys(final ProcData procData) throws UnrecoverableKeyException, KeyStoreException, NoSuchAlgorithmException {
+        procData.apiEcPrivateKeyBase64 = Base64.getEncoder().encodeToString(getEcSigner().getECKeyPair(getKsAlias()).getPrivate().getEncoded());                
+        procData.apiEcPublicKeyBase64 = Base64.getEncoder().encodeToString(getEcSigner().getECKeyPair(getKsAlias()).getPublic().getEncoded());
+    }
+
 }

@@ -3,6 +3,9 @@
  */
 package org.gluu.crypto.objects;
 
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
 import java.util.Base64;
 
 import org.gluu.crypto.primitives.EcSigner;
@@ -37,9 +40,21 @@ public class WebSiteObject extends ProcObject {
      * 
      * @param procData
      */
-    public void genUidAndPassw(ProcData procData) {
+    public void genUidAndPassw(final ProcData procData) {
         procData.uidBase64 = Base64.getEncoder().encodeToString(new RandomStringGen(8, RandomStringGen.DEF_MODE_DIGITS).nextString().getBytes());
         procData.passwordBase64 =  Base64.getEncoder().encodeToString(new RandomStringGen(21, RandomStringGen.DEF_MODE_ALL).nextString().getBytes());
+    }
+    
+    /**
+     * 
+     * @param procData
+     * @throws NoSuchAlgorithmException 
+     * @throws KeyStoreException 
+     * @throws UnrecoverableKeyException 
+     */
+    public void initEcSignatureKeys(final ProcData procData) throws UnrecoverableKeyException, KeyStoreException, NoSuchAlgorithmException {
+        procData.webSiteEcPrivateKeyBase64 = Base64.getEncoder().encodeToString(getEcSigner().getECKeyPair(getKsAlias()).getPrivate().getEncoded());                
+        procData.webSiteEcPublicKeyBase64 = Base64.getEncoder().encodeToString(getEcSigner().getECKeyPair(getKsAlias()).getPublic().getEncoded());
     }
     
 }
