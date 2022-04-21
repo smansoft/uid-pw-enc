@@ -35,9 +35,9 @@ public class AesEncrypter {
     @SuppressWarnings("unused")
     private static final Logger LOG = LoggerFactory.getLogger(AesEncrypter.class);
 
-    private static final String DEF_CONST_SALT = "$0aX3#:LyE3MmEq9";    // constant Salt
+    private static final String DEF_CONST_SALT_BASE64 =  Base64.getEncoder().encodeToString(new String("$0aX3#:LyE3MmEq9").getBytes());     // constant Salt
 
-    private static final String DEF_CONST_IV = "7YFM&tIJEC9nZ,U+";      // constant IV
+    private static final String DEF_CONST_IV_BASE64 = Base64.getEncoder().encodeToString(new String("7YFM&tIJEC9nZ,U+").getBytes());        // constant IV
 
     /**
      * AesKeyData, key data: key and salt (in Base64) for AES.
@@ -123,7 +123,7 @@ public class AesEncrypter {
     public AesEncrypter(final AesKeyData aesKeyData) throws NoSuchAlgorithmException, InvalidKeySpecException {
         this.aesKeyData = aesKeyData;
         if(this.aesKeyData.saltBase64 == null) {
-            this.aesKeyData.saltBase64 = Base64.getEncoder().encodeToString(DEF_CONST_SALT.getBytes());
+            this.aesKeyData.saltBase64 = DEF_CONST_SALT_BASE64;
         }
         PBEKeySpec keySpec = new PBEKeySpec(new String(Base64.getDecoder().decode(aesKeyData.keyBase64)).toCharArray(),
                 Base64.getDecoder().decode(aesKeyData.saltBase64),
@@ -144,7 +144,7 @@ public class AesEncrypter {
      */
     public void encData(final AesEncData encData) throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException {
         if(encData.ivBase64 == null) {
-            encData.ivBase64 = Base64.getEncoder().encodeToString(DEF_CONST_IV.getBytes());
+            encData.ivBase64 = DEF_CONST_IV_BASE64;
         }
         Cipher cipher = Cipher.getInstance(DEF_AES_MODE, EncryptTools.getProvider());
         cipher.init(Cipher.ENCRYPT_MODE, this.curSecretKey, new IvParameterSpec(Base64.getDecoder().decode(encData.ivBase64)));
