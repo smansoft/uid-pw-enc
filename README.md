@@ -89,60 +89,60 @@ Launching uid-pw-enc:
 Example of log:
 -------------------
 
-    2022-04-15 08:00:43.825 [main] INFO org.gluu.crypto.EncryptingUidPw - Application uid-pw-enc started...
-    2022-04-15 08:00:43.827 [main] INFO org.gluu.crypto.EncryptingUidPw - ------------------------
-    2022-04-15 08:00:43.827 [main] INFO org.gluu.crypto.EncryptingUidPw - > Creating WebSite Object:
-    2022-04-15 08:00:44.026 [main] INFO org.gluu.crypto.EncryptingUidPw - < WebSite Object has been created...
-    2022-04-15 08:00:44.026 [main] INFO org.gluu.crypto.EncryptingUidPw - > Creating API Object:
-    2022-04-15 08:00:44.087 [main] INFO org.gluu.crypto.EncryptingUidPw - < API Object has been created...
-    2022-04-15 08:00:44.087 [main] INFO org.gluu.crypto.EncryptingUidPw - ------------------------
-    2022-04-15 08:00:44.088 [main] INFO org.gluu.crypto.EncryptingUidPw - > Generating Uid and Password:
-    2022-04-15 08:00:44.090 [main] INFO org.gluu.crypto.EncryptingUidPw - Uid (Base64): NzY0MTM4OTk=
-    2022-04-15 08:00:44.091 [main] INFO org.gluu.crypto.EncryptingUidPw - Password (Base64): cyNmLWl1LWJYaHw4Jyo5WVMrNDJP
-    2022-04-15 08:00:44.091 [main] INFO org.gluu.crypto.EncryptingUidPw - < Uid and Password have been generated...
-    2022-04-15 08:00:44.091 [main] INFO org.gluu.crypto.EncryptingUidPw - ------------------------
-    2022-04-15 08:00:44.091 [main] INFO org.gluu.crypto.EncryptingUidPw - > WebSite Object: Generating EC signature keys:
-    2022-04-15 08:00:44.435 [main] INFO org.gluu.crypto.EncryptingUidPw - WebSite Ec Private Key (Base64) = MIGTAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBHkwdwIBAQQgujR12Bu+n/jXceYlHfGQc50ydfPDCAnFQX0VonrN+GCgCgYIKoZIzj0DAQehRANCAAR2HZ5kcdK4N8VLfowOkp/Rg/UK7SQ+9c/AHcXsMVgdKVzXm6jBQ8iNfbsD20lrkVk7UoIiPjpoh+ZLzBm7Ff+x
-    2022-04-15 08:00:44.436 [main] INFO org.gluu.crypto.EncryptingUidPw - WebSite Ec Public Key (Base64) = MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEdh2eZHHSuDfFS36MDpKf0YP1Cu0kPvXPwB3F7DFYHSlc15uowUPIjX27A9tJa5FZO1KCIj46aIfmS8wZuxX/sQ==
-    2022-04-15 08:00:44.436 [main] INFO org.gluu.crypto.EncryptingUidPw - < WebSite Object: EC signature keys have been generated...
-    2022-04-15 08:00:44.437 [main] INFO org.gluu.crypto.EncryptingUidPw - ------------------------
-    2022-04-15 08:00:44.437 [main] INFO org.gluu.crypto.EncryptingUidPw - > WebSite Object: Signing Uid:
-    2022-04-15 08:00:44.447 [main] INFO org.gluu.crypto.EncryptingUidPw - WebSite Object Signature (Base64) = MEUCIFhkiTcGn+JuOOP/lzZQaq8BJjhYXxwl9XjKCCKo1ifMAiEAj4zuzj581sWhxFKIK23XquA0xJUuKdb+dfZmuP++Ta0=
-    2022-04-15 08:00:44.447 [main] INFO org.gluu.crypto.EncryptingUidPw - < WebSite Object: Uid has been signed...
-    2022-04-15 08:00:44.447 [main] INFO org.gluu.crypto.EncryptingUidPw - ------------------------
-    2022-04-15 08:00:44.448 [main] INFO org.gluu.crypto.EncryptingUidPw - > WebSite Object: Verifying signature of Uid:
-    2022-04-15 08:00:44.459 [main] INFO org.gluu.crypto.EncryptingUidPw - WebSite Object Verifying = true
-    2022-04-15 08:00:44.460 [main] INFO org.gluu.crypto.EncryptingUidPw - < WebSite Object: Signature of Uid has been verified...
-    2022-04-15 08:00:44.460 [main] INFO org.gluu.crypto.EncryptingUidPw - ------------------------
-    2022-04-15 08:00:44.460 [main] INFO org.gluu.crypto.EncryptingUidPw - > API Object: Generating EC signature keys:
-    2022-04-15 08:00:44.557 [main] INFO org.gluu.crypto.EncryptingUidPw - API Ec Private Key (Base64) = MIGTAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBHkwdwIBAQQgRUg7r3lq9O5EKfuiS1PtS1LdyCDqoLnQxNSisN57+BqgCgYIKoZIzj0DAQehRANCAAThD91JDJus1Ih9rOow17buYXeGdkYWTvua86r+vxdLyESatpSn20kPIx7RqIZR+2oGSf4vSmrNNLmz2iBczDwk
-    2022-04-15 08:00:44.558 [main] INFO org.gluu.crypto.EncryptingUidPw - API Ec Public Key (Base64) = MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE4Q/dSQybrNSIfazqMNe27mF3hnZGFk77mvOq/r8XS8hEmraUp9tJDyMe0aiGUftqBkn+L0pqzTS5s9ogXMw8JA==
-    2022-04-15 08:00:44.568 [main] INFO org.gluu.crypto.EncryptingUidPw - API Object Signature (Base64) = MEUCIQDa+ARZX7bW0bzYuQKyOS3LIhswiAdQAQ11dMEVHBvEJwIgWJYhXcsuNt3/Hfk2zefW0V4wSKbm/68D/wcbOFSe7dQ=
-    2022-04-15 08:00:44.568 [main] INFO org.gluu.crypto.EncryptingUidPw - < API Object: EC signature keys have been generated...
-    2022-04-15 08:00:44.568 [main] INFO org.gluu.crypto.EncryptingUidPw - ------------------------
-    2022-04-15 08:00:44.568 [main] INFO org.gluu.crypto.EncryptingUidPw - > API Object: Verifying signature of WebSite Object signature:
-    2022-04-15 08:00:44.578 [main] INFO org.gluu.crypto.EncryptingUidPw - API Object Verifying = true
-    2022-04-15 08:00:44.578 [main] INFO org.gluu.crypto.EncryptingUidPw - < API Object: Signature of WebSite Object signature has been verified...
-    2022-04-15 08:00:44.578 [main] INFO org.gluu.crypto.EncryptingUidPw - ------------------------
-    2022-04-15 08:00:44.578 [main] INFO org.gluu.crypto.EncryptingUidPw - > API Object: Initializing AES key, salt:
-    2022-04-15 08:00:44.951 [main] INFO org.gluu.crypto.EncryptingUidPw - < API Object: AES key, salt have been initialized...
-    2022-04-15 08:00:44.952 [main] INFO org.gluu.crypto.EncryptingUidPw - ------------------------
-    2022-04-15 08:00:44.952 [main] INFO org.gluu.crypto.EncryptingUidPw - > API Object: Encrypting password:
-    2022-04-15 08:00:44.966 [main] INFO org.gluu.crypto.EncryptingUidPw - < API Object: Password has been encrypted...
-    2022-04-15 08:00:44.966 [main] INFO org.gluu.crypto.EncryptingUidPw - ------------------------
-    2022-04-15 08:00:44.967 [main] INFO org.gluu.crypto.EncryptingUidPw - > API Object: Back decrypting password:
-    2022-04-15 08:00:44.967 [main] INFO org.gluu.crypto.EncryptingUidPw - < API Object: Password has been decrypted...
-    2022-04-15 08:00:44.967 [main] INFO org.gluu.crypto.EncryptingUidPw - ------------------------
-    2022-04-15 08:00:44.967 [main] INFO org.gluu.crypto.EncryptingUidPw - AES Encrypting Data:
-    2022-04-15 08:00:44.967 [main] INFO org.gluu.crypto.EncryptingUidPw - src data (Base64) = cyNmLWl1LWJYaHw4Jyo5WVMrNDJP
-    2022-04-15 08:00:44.967 [main] INFO org.gluu.crypto.EncryptingUidPw - enc data (Base64) = krjrWphMdCH+gTDU3fVfw0jbUJC9u/CyyGcLfbfeKX73cEODAg==
-    2022-04-15 08:00:44.967 [main] INFO org.gluu.crypto.EncryptingUidPw - dec data (Base64) = cyNmLWl1LWJYaHw4Jyo5WVMrNDJP
-    2022-04-15 08:00:44.968 [main] INFO org.gluu.crypto.EncryptingUidPw - ------------------------
-    2022-04-15 08:00:44.968 [main] INFO org.gluu.crypto.EncryptingUidPw - password (Decoded) = s#f-iu-bXh|8'*9YS+42O
-    2022-04-15 08:00:44.968 [main] INFO org.gluu.crypto.EncryptingUidPw - src data (Decoded) = s#f-iu-bXh|8'*9YS+42O
-    2022-04-15 08:00:44.968 [main] INFO org.gluu.crypto.EncryptingUidPw - dec data (Decoded) = s#f-iu-bXh|8'*9YS+42O
-    2022-04-15 08:00:44.968 [main] INFO org.gluu.crypto.EncryptingUidPw - ------------------------
-    2022-04-15 08:00:45.021 [main] INFO org.gluu.crypto.EncryptingUidPw - Flow Data in XML format:
-    2022-04-15 08:00:45.021 [main] INFO org.gluu.crypto.EncryptingUidPw - xmlProcData = <proc_data><uid>NzY0MTM4OTk=</uid><password>cyNmLWl1LWJYaHw4Jyo5WVMrNDJP</password><web_site_ec_private_key>MIGTAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBHkwdwIBAQQgujR12Bu+n/jXceYlHfGQc50ydfPDCAnFQX0VonrN+GCgCgYIKoZIzj0DAQehRANCAAR2HZ5kcdK4N8VLfowOkp/Rg/UK7SQ+9c/AHcXsMVgdKVzXm6jBQ8iNfbsD20lrkVk7UoIiPjpoh+ZLzBm7Ff+x</web_site_ec_private_key><web_site_ec_public_key>MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEdh2eZHHSuDfFS36MDpKf0YP1Cu0kPvXPwB3F7DFYHSlc15uowUPIjX27A9tJa5FZO1KCIj46aIfmS8wZuxX/sQ==</web_site_ec_public_key><web_site_signature>MEUCIFhkiTcGn+JuOOP/lzZQaq8BJjhYXxwl9XjKCCKo1ifMAiEAj4zuzj581sWhxFKIK23XquA0xJUuKdb+dfZmuP++Ta0=</web_site_signature><api_ec_private_key>MIGTAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBHkwdwIBAQQgRUg7r3lq9O5EKfuiS1PtS1LdyCDqoLnQxNSisN57+BqgCgYIKoZIzj0DAQehRANCAAThD91JDJus1Ih9rOow17buYXeGdkYWTvua86r+vxdLyESatpSn20kPIx7RqIZR+2oGSf4vSmrNNLmz2iBczDwk</api_ec_private_key><api_ec_public_key>MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE4Q/dSQybrNSIfazqMNe27mF3hnZGFk77mvOq/r8XS8hEmraUp9tJDyMe0aiGUftqBkn+L0pqzTS5s9ogXMw8JA==</api_ec_public_key><api_signature>MEUCIQDa+ARZX7bW0bzYuQKyOS3LIhswiAdQAQ11dMEVHBvEJwIgWJYhXcsuNt3/Hfk2zefW0V4wSKbm/68D/wcbOFSe7dQ=</api_signature><enc_salt>dHFiZDZEeUo8MGw5JE0oWg==</enc_salt><secret_key>MEUCIFhkiTcGn+JuOOP/lzZQaq8BJjhYXxwl9XjKCCKo1ifMAiEAj4zuzj581sWhxFKIK23XquA0xJUuKdb+dfZmuP++Ta0=</secret_key><iv>I3lRd3R2TVUoKGZBXy1nQA==</iv><src_data>cyNmLWl1LWJYaHw4Jyo5WVMrNDJP</src_data><enc_data>krjrWphMdCH+gTDU3fVfw0jbUJC9u/CyyGcLfbfeKX73cEODAg==</enc_data><dec_data>cyNmLWl1LWJYaHw4Jyo5WVMrNDJP</dec_data></proc_data>
-    2022-04-15 08:00:45.022 [main] INFO org.gluu.crypto.EncryptingUidPw - ------------------------
-    2022-04-15 08:00:45.022 [main] INFO org.gluu.crypto.EncryptingUidPw - Application uid-pw-enc finished...
+    2022-04-21 16:45:38.154 [main] INFO org.gluu.crypto.EncryptingUidPw - Application uid-pw-enc started...
+    2022-04-21 16:45:38.157 [main] INFO org.gluu.crypto.EncryptingUidPw - ------------------------
+    2022-04-21 16:45:38.157 [main] INFO org.gluu.crypto.EncryptingUidPw - > Creating WebSite Object:
+    2022-04-21 16:45:38.350 [main] INFO org.gluu.crypto.EncryptingUidPw - < WebSite Object has been created...
+    2022-04-21 16:45:38.351 [main] INFO org.gluu.crypto.EncryptingUidPw - > Creating API Object:
+    2022-04-21 16:45:38.403 [main] INFO org.gluu.crypto.EncryptingUidPw - < API Object has been created...
+    2022-04-21 16:45:38.404 [main] INFO org.gluu.crypto.EncryptingUidPw - ------------------------
+    2022-04-21 16:45:38.404 [main] INFO org.gluu.crypto.EncryptingUidPw - > Generating Uid and Password:
+    2022-04-21 16:45:38.406 [main] INFO org.gluu.crypto.EncryptingUidPw - Uid (Base64): MzM3MjY1NjU=
+    2022-04-21 16:45:38.407 [main] INFO org.gluu.crypto.EncryptingUidPw - Password (Base64): bThCJUo3M05Mfno8TFJJLUw2eEpa
+    2022-04-21 16:45:38.407 [main] INFO org.gluu.crypto.EncryptingUidPw - < Uid and Password have been generated...
+    2022-04-21 16:45:38.407 [main] INFO org.gluu.crypto.EncryptingUidPw - ------------------------
+    2022-04-21 16:45:38.407 [main] INFO org.gluu.crypto.EncryptingUidPw - > WebSite Object: Generating EC signature keys:
+    2022-04-21 16:45:38.748 [main] INFO org.gluu.crypto.EncryptingUidPw - WebSite Ec Private Key (Base64) = MIGTAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBHkwdwIBAQQgkpL2wK0zDj0B8jOjrF6TuAqg3tCjdDQBCJf9EZaXMIigCgYIKoZIzj0DAQehRANCAATrmbliTkErqBDBFPggbDCkCfim0Sm8fr+SOlwFraCdDFwy5mPRn6thIVAWLCmfzut6UGHmkPbbJcM0JqqXC8AR
+    2022-04-21 16:45:38.749 [main] INFO org.gluu.crypto.EncryptingUidPw - WebSite Ec Public Key (Base64) = MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE65m5Yk5BK6gQwRT4IGwwpAn4ptEpvH6/kjpcBa2gnQxcMuZj0Z+rYSFQFiwpn87relBh5pD22yXDNCaqlwvAEQ==
+    2022-04-21 16:45:38.749 [main] INFO org.gluu.crypto.EncryptingUidPw - < WebSite Object: EC signature keys have been generated...
+    2022-04-21 16:45:38.749 [main] INFO org.gluu.crypto.EncryptingUidPw - ------------------------
+    2022-04-21 16:45:38.749 [main] INFO org.gluu.crypto.EncryptingUidPw - > WebSite Object: Signing Uid:
+    2022-04-21 16:45:38.760 [main] INFO org.gluu.crypto.EncryptingUidPw - WebSite Object Signature (Base64) = MEUCIAQVwkt/d11dgCpjkD7sJgHrn6gEcE8W7uL1NYzFXvwCAiEArZbFgxC6y8IDdclDKMEOJW1vgE9PHWYOMoEZrR4wGYw=
+    2022-04-21 16:45:38.761 [main] INFO org.gluu.crypto.EncryptingUidPw - < WebSite Object: Uid has been signed...
+    2022-04-21 16:45:38.761 [main] INFO org.gluu.crypto.EncryptingUidPw - ------------------------
+    2022-04-21 16:45:38.761 [main] INFO org.gluu.crypto.EncryptingUidPw - > WebSite Object: Verifying signature of Uid:
+    2022-04-21 16:45:38.772 [main] INFO org.gluu.crypto.EncryptingUidPw - WebSite Object Verifying = true
+    2022-04-21 16:45:38.772 [main] INFO org.gluu.crypto.EncryptingUidPw - < WebSite Object: Signature of Uid has been verified...
+    2022-04-21 16:45:38.772 [main] INFO org.gluu.crypto.EncryptingUidPw - ------------------------
+    2022-04-21 16:45:38.772 [main] INFO org.gluu.crypto.EncryptingUidPw - > API Object: Generating EC signature keys:
+    2022-04-21 16:45:38.867 [main] INFO org.gluu.crypto.EncryptingUidPw - API Ec Private Key (Base64) = MIGTAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBHkwdwIBAQQguU2PWPIq97lL/3XtlATLaWPOEIgO/W3yf/Nw+ZxrHYmgCgYIKoZIzj0DAQehRANCAARUS5fGT17gv394V8H20KImO67aCDsovFqmJ6NxwQVj/eDkReZgKssEGaxxfKJ2ODZdS6ZZ2v90+9ZHPzx7pIui
+    2022-04-21 16:45:38.867 [main] INFO org.gluu.crypto.EncryptingUidPw - API Ec Public Key (Base64) = MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEVEuXxk9e4L9/eFfB9tCiJjuu2gg7KLxapiejccEFY/3g5EXmYCrLBBmscXyidjg2XUumWdr/dPvWRz88e6SLog==
+    2022-04-21 16:45:38.877 [main] INFO org.gluu.crypto.EncryptingUidPw - API Object Signature (Base64) = MEQCIE9MKRq5GQ0ojnvdwOqkv27Wm0tgPXfFwgVl1HE7XWxyAiAyNBr3aSW/BttLaIR45J09p69UG8Ng03sqIMqgCvSxAA==
+    2022-04-21 16:45:38.878 [main] INFO org.gluu.crypto.EncryptingUidPw - < API Object: EC signature keys have been generated...
+    2022-04-21 16:45:38.878 [main] INFO org.gluu.crypto.EncryptingUidPw - ------------------------
+    2022-04-21 16:45:38.878 [main] INFO org.gluu.crypto.EncryptingUidPw - > API Object: Verifying signature of WebSite Object signature:
+    2022-04-21 16:45:38.888 [main] INFO org.gluu.crypto.EncryptingUidPw - API Object Verifying = true
+    2022-04-21 16:45:38.888 [main] INFO org.gluu.crypto.EncryptingUidPw - < API Object: Signature of WebSite Object signature has been verified...
+    2022-04-21 16:45:38.888 [main] INFO org.gluu.crypto.EncryptingUidPw - ------------------------
+    2022-04-21 16:45:38.888 [main] INFO org.gluu.crypto.EncryptingUidPw - > API Object: Initializing AES key, salt:
+    2022-04-21 16:45:39.243 [main] INFO org.gluu.crypto.EncryptingUidPw - < API Object: AES key, salt have been initialized...
+    2022-04-21 16:45:39.244 [main] INFO org.gluu.crypto.EncryptingUidPw - ------------------------
+    2022-04-21 16:45:39.244 [main] INFO org.gluu.crypto.EncryptingUidPw - > API Object: Encrypting password:
+    2022-04-21 16:45:39.258 [main] INFO org.gluu.crypto.EncryptingUidPw - < API Object: Password has been encrypted...
+    2022-04-21 16:45:39.258 [main] INFO org.gluu.crypto.EncryptingUidPw - ------------------------
+    2022-04-21 16:45:39.258 [main] INFO org.gluu.crypto.EncryptingUidPw - > API Object: Back decrypting password:
+    2022-04-21 16:45:39.258 [main] INFO org.gluu.crypto.EncryptingUidPw - < API Object: Password has been decrypted...
+    2022-04-21 16:45:39.258 [main] INFO org.gluu.crypto.EncryptingUidPw - ------------------------
+    2022-04-21 16:45:39.259 [main] INFO org.gluu.crypto.EncryptingUidPw - AES Encrypting Data:
+    2022-04-21 16:45:39.260 [main] INFO org.gluu.crypto.EncryptingUidPw - src data (Base64) = bThCJUo3M05Mfno8TFJJLUw2eEpa
+    2022-04-21 16:45:39.260 [main] INFO org.gluu.crypto.EncryptingUidPw - enc data (Base64) = wM76TUb8bn019gnAT6h0LminqWQeCpm84hMNJ/gHf/EXEUzyKg==
+    2022-04-21 16:45:39.260 [main] INFO org.gluu.crypto.EncryptingUidPw - dec data (Base64) = bThCJUo3M05Mfno8TFJJLUw2eEpa
+    2022-04-21 16:45:39.260 [main] INFO org.gluu.crypto.EncryptingUidPw - ------------------------
+    2022-04-21 16:45:39.260 [main] INFO org.gluu.crypto.EncryptingUidPw - password (Decoded) = m8B%J73NL~z<LRI-L6xJZ
+    2022-04-21 16:45:39.260 [main] INFO org.gluu.crypto.EncryptingUidPw - src data (Decoded) = m8B%J73NL~z<LRI-L6xJZ
+    2022-04-21 16:45:39.261 [main] INFO org.gluu.crypto.EncryptingUidPw - dec data (Decoded) = m8B%J73NL~z<LRI-L6xJZ
+    2022-04-21 16:45:39.261 [main] INFO org.gluu.crypto.EncryptingUidPw - ------------------------
+    2022-04-21 16:45:39.312 [main] INFO org.gluu.crypto.EncryptingUidPw - Flow Data in XML format:
+    2022-04-21 16:45:39.313 [main] INFO org.gluu.crypto.EncryptingUidPw - xmlProcData = <proc_data><uid>MzM3MjY1NjU=</uid><password>bThCJUo3M05Mfno8TFJJLUw2eEpa</password><web_site_ec_private_key>MIGTAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBHkwdwIBAQQgkpL2wK0zDj0B8jOjrF6TuAqg3tCjdDQBCJf9EZaXMIigCgYIKoZIzj0DAQehRANCAATrmbliTkErqBDBFPggbDCkCfim0Sm8fr+SOlwFraCdDFwy5mPRn6thIVAWLCmfzut6UGHmkPbbJcM0JqqXC8AR</web_site_ec_private_key><web_site_ec_public_key>MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE65m5Yk5BK6gQwRT4IGwwpAn4ptEpvH6/kjpcBa2gnQxcMuZj0Z+rYSFQFiwpn87relBh5pD22yXDNCaqlwvAEQ==</web_site_ec_public_key><web_site_signature>MEUCIAQVwkt/d11dgCpjkD7sJgHrn6gEcE8W7uL1NYzFXvwCAiEArZbFgxC6y8IDdclDKMEOJW1vgE9PHWYOMoEZrR4wGYw=</web_site_signature><api_ec_private_key>MIGTAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBHkwdwIBAQQguU2PWPIq97lL/3XtlATLaWPOEIgO/W3yf/Nw+ZxrHYmgCgYIKoZIzj0DAQehRANCAARUS5fGT17gv394V8H20KImO67aCDsovFqmJ6NxwQVj/eDkReZgKssEGaxxfKJ2ODZdS6ZZ2v90+9ZHPzx7pIui</api_ec_private_key><api_ec_public_key>MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEVEuXxk9e4L9/eFfB9tCiJjuu2gg7KLxapiejccEFY/3g5EXmYCrLBBmscXyidjg2XUumWdr/dPvWRz88e6SLog==</api_ec_public_key><api_signature>MEQCIE9MKRq5GQ0ojnvdwOqkv27Wm0tgPXfFwgVl1HE7XWxyAiAyNBr3aSW/BttLaIR45J09p69UG8Ng03sqIMqgCvSxAA==</api_signature><enc_salt>JDBhWDMjOkx5RTNNbUVxOQ==</enc_salt><secret_key>MEUCIAQVwkt/d11dgCpjkD7sJgHrn6gEcE8W7uL1NYzFXvwCAiEArZbFgxC6y8IDdclDKMEOJW1vgE9PHWYOMoEZrR4wGYw=</secret_key><iv>N1lGTSZ0SUpFQzluWixVKw==</iv><src_data>bThCJUo3M05Mfno8TFJJLUw2eEpa</src_data><enc_data>wM76TUb8bn019gnAT6h0LminqWQeCpm84hMNJ/gHf/EXEUzyKg==</enc_data><dec_data>bThCJUo3M05Mfno8TFJJLUw2eEpa</dec_data></proc_data>
+    2022-04-21 16:45:39.313 [main] INFO org.gluu.crypto.EncryptingUidPw - ------------------------
+    2022-04-21 16:45:39.314 [main] INFO org.gluu.crypto.EncryptingUidPw - Application uid-pw-enc finished...
