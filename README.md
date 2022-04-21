@@ -44,12 +44,12 @@ Features of the uid-pw-enc:
             - output of encrypted password (in original format and in Base64 format);
             - output of decrypted password (in original format and in Base64 format);
             - generating result XML;
-            - output result XML;            
+            - output result XML;
 
-Diagramm that shows implemented algorithm:
+Diagram that shows implemented algorithm:
 --------------------
 
-![plot](AES.rnd_salt_iv.png)
+![plot](AES.const_salt_iv.png)
 
 Building uid-pw-enc binary files:
 --------------------

@@ -7,7 +7,6 @@ import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
-import java.util.Arrays;
 import java.util.Base64;
 
 import javax.crypto.BadPaddingException;
@@ -21,7 +20,6 @@ import javax.crypto.spec.PBEKeySpec;
 
 import org.gluu.crypto.exceptions.EncException;
 import org.gluu.crypto.tools.EncryptTools;
-import org.gluu.crypto.tools.RandomStringGen;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,10 +31,14 @@ import org.slf4j.LoggerFactory;
  * @version 2022-04-11
  */
 public class AesEncrypter {
-    
+
     @SuppressWarnings("unused")
     private static final Logger LOG = LoggerFactory.getLogger(AesEncrypter.class);
-    
+
+    private static final String DEF_CONST_SALT = "$0aX3#:LyE3MmEq9";    // constant Salt
+
+    private static final String DEF_CONST_IV = "7YFM&tIJEC9nZ,U+";      // constant IV
+
     /**
      * AesKeyData, key data: key and salt (in Base64) for AES.
      * 
@@ -121,8 +123,7 @@ public class AesEncrypter {
     public AesEncrypter(final AesKeyData aesKeyData) throws NoSuchAlgorithmException, InvalidKeySpecException {
         this.aesKeyData = aesKeyData;
         if(this.aesKeyData.saltBase64 == null) {
-            this.aesKeyData.saltBase64 =
-                    Base64.getEncoder().encodeToString(new RandomStringGen(AesEncrypter.DEF_AES_KEY_LENGTH, RandomStringGen.DEF_MODE_ALL).nextString().getBytes());
+            this.aesKeyData.saltBase64 = Base64.getEncoder().encodeToString(DEF_CONST_SALT.getBytes());
         }
         PBEKeySpec keySpec = new PBEKeySpec(new String(Base64.getDecoder().decode(aesKeyData.keyBase64)).toCharArray(),
                 Base64.getDecoder().decode(aesKeyData.saltBase64),
@@ -143,7 +144,7 @@ public class AesEncrypter {
      */
     public void encData(final AesEncData encData) throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException {
         if(encData.ivBase64 == null) {
-            encData.ivBase64 = Base64.getEncoder().encodeToString(new RandomStringGen(AesEncrypter.DEF_AES_KEY_LENGTH, RandomStringGen.DEF_MODE_ALL).nextString().getBytes());
+            encData.ivBase64 = Base64.getEncoder().encodeToString(DEF_CONST_IV.getBytes());
         }
         Cipher cipher = Cipher.getInstance(DEF_AES_MODE, EncryptTools.getProvider());
         cipher.init(Cipher.ENCRYPT_MODE, this.curSecretKey, new IvParameterSpec(Base64.getDecoder().decode(encData.ivBase64)));
