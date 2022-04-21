@@ -46,7 +46,7 @@ Features of the uid-pw-enc:
             - generating result XML;
             - output result XML;            
 
-Diagramm that shows encrypting progress:
+Diagramm that shows implemented encrypting/descripting algorithm:
 --------------------
 
 ![plot](AES.rnd_salt_iv.png)
