@@ -1,0 +1,33 @@
+
+title Secure PW Storage
+
+actor User
+
+Website->Website: 1. "A" = new sig keypair
+API->API: 2. "B" = new sig keypair
+User->Website: 3. enter uid / pw
+Website->API: 4. uid, pw, A(uid)
+
+API->API: 5. new random salt for enc AES key (salt)
+
+API->API: 6. new AES key from input Aes_Key = (SHA256(B(A(uid))), salt)
+
+API->API: 7. new random iv for enc message (iv)
+API->API: 8. C(pw) = AES_ENC (iv, Aes_Key, pw)
+
+alt enroll
+
+API->DB: 9. Store {"uid", iv, salt, C(pw)}
+API->Website: 10. enrolling
+end 
+
+alt authn
+API->DB: 11. Query ("uid")
+DB->API: 12. data (iv, salt, C(pw))
+
+API->API: 13. AES key from input Aes_Key = (SHA256(B(A(uid))), salt)
+
+API->API: 14. pw = AES_DEC (iv, Aes_Key, C(pw)), i.e. decrypt C(data) and compare
+API->Website: 15. pass / fail
+end
+
